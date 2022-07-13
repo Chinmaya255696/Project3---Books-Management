@@ -9,7 +9,7 @@ router.post("/register", userController.createUser)
 router.post("/login", userController.loginUser)
 
 router.post("/books", commnMid.Authentication, commnMid.Auth2, booksController.createBook)
-router.get('/books', commnMid.Authentication, booksController.getBook)
+router.get('/books',  booksController.getBook)
 router.get('/books/:bookId', commnMid.Authentication, booksController.getBookById)
 router.put('/books/:bookId', commnMid.Authentication, commnMid.AuthByQuery, booksController.updateBook)
 router.delete('/books/:bookId', commnMid.Authentication, commnMid.AuthByQuery, booksController.deleteBookById)

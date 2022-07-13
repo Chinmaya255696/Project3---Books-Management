@@ -6,8 +6,6 @@ const createBook = async function (req, res) {
     try {
         let data = req.body
 
-        // if (Object.keys(data).length == 0) { return res.status(400).send({ status: false, message: "Please provide your Book details in body" }) };
-
         if (!data.title || data.title.trim().length == 0) { return res.status(400).send({ status: false, message: "Title field is required" }) };
 
         if (!data.excerpt || data.excerpt.trim().length == 0) { return res.status(400).send({ status: false, message: "Excerpt field is required" }) };
@@ -34,7 +32,6 @@ const createBook = async function (req, res) {
         let isbnCheck = await booksModel.findOne({ ISBN: data.ISBN });
         if (isbnCheck) { return res.status(400).send({ status: false, message: "ISBN is already registerd, try anothor" }) };
 
-        // if (!(/^.{10,13}$/.test(data.ISBN))) { return res.status(400).send({ status: false, message: "ISBN length should be in between 10 to 13" }) };
 
         if (!(/^(?=(?:\D*\d){10}(?:(?:\D*\d){3})?$)/.test(data.ISBN))) { return res.status(400).send({ status: false, message: "ISBN should be in Number type and its length should be in 13 digits" }) };
 
@@ -89,6 +86,7 @@ const getBook = async function (req, res) {
             } else {
                 return res.status(200).send({ status: true, message: "Books List", data: categoryCheck })
             };
+        
         }
         else if (req.query.subcategory) {
 
@@ -103,9 +101,9 @@ const getBook = async function (req, res) {
             };
         }
         else {
+           
             let finaldata= await booksModel.find({isDeleted:false})
-            return res.status(200).send({ status:true, message: "success", data:finaldata })
-
+            return res.status(200).send({ status:true, msg: "success", data:finaldata })
         }
     } catch (err) {
         return res.status(500).send({ message: "Error", error: err.message });

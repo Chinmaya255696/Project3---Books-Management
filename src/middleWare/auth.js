@@ -9,7 +9,8 @@ const Authentication = function (req, res, next) {
     jwt.verify(token, "group11-project3",function(err,data){
         if(err) return res.status(401).send({status:false, message:"token is not valid"})
     
-    else {req.userdata = data}
+    else {data}
+    // console.log(data)
     next()
     })
     } catch (err) {
@@ -26,20 +27,20 @@ let Auth2= async function (req, res, next) {
 
       
       let requestUserId = req.body.userId 
-      if(!requestUserId) return res.status(400).send({err:"please enter userID"}) 
+      if(!requestUserId) return res.status(400).send({status:false,message:"please enter userID"}) 
   
-      if(requestUserId.length != 24) return res.status(400).send({ message: "enter valid userID" });
+      if (requestUserId.length != 24) return res.status(400).send({ status: false, message: "enter valid userID" });
   
      const userloggId = await userModel.findOne({ _id: requestUserId });
-      if (! userloggId) return res.status(404).send({ err: "UserID not found " });
+      if (!userloggId) return res.status(404).send({ status: false, message: "UserID not found " });
       let userLoggin = decodeToken.userId
       if (userloggId._id!= userLoggin)
-        return res.status(403).send({ message: "logedin user is not authorized To create book"});
+        return res.status(403).send({ status:false,message: "logedin user is not authorized To create book"});
   
       next();
     } catch (error) {
       console.log(error);
-      return res.status(500).send({ err: error.message });
+      return res.status(500).send({ status: false, msg: error.message });
     }
   }; 
 
@@ -54,15 +55,15 @@ let AuthByQuery = async function (req, res, next) {
         if (!(/^[0-9a-fA-F]{24}$/.test(requestBookId))) { return res.status(400).send({ status: false, message: "BookId format isn't correct" }) }
 
         let findBookID = await booksModel.findById({ _id: requestBookId });
-        if (!findBookID) return res.status(404).send({ err: "Book not found " });
+        if (!findBookID) return res.status(404).send({ status:false, message: "Book not found " });
 
         let userLogin = decodeToken.userId
         if (findBookID.userId != userLogin)
-            return res.status(403).send({ message: "logedin user is not authorized " });
+            return res.status(403).send({ status:false,message: "logedin user is not authorized " });
 
         next();
     } catch (error) {
-        return res.status(500).send({ err: error.message });
+      return res.status(500).send({ status:false,err: error.message });
     }
 };
 
